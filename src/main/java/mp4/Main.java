@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
 /**
  * @author tarique
@@ -27,7 +29,7 @@ public class Main extends AbstractHandler
     private final static int jobSize = 8192; //1024*1024*4/512
     private final static int totalSize = 4194304; //1024*1024*4
     private static BlockingQueue<Job> jobQueue = new LinkedBlockingQueue<Job>(); // do we need a blocking queue?
-
+    private static int count = 0;
     public void handle(String target,
                        Request baseRequest,
                        HttpServletRequest request,
@@ -41,21 +43,35 @@ public class Main extends AbstractHandler
         //String message = "Hello World!";
         //request.setAttribute("message", message); // This will be available as ${message}
         //request.getRequestDispatcher("page.jsp").forward(request, response);
+
+
     }
 
     public static void main(String[] args) throws Exception
     {
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath("/");
         Server server = new Server(8081);
-        server.setHandler(new Main());
- 
+        server.setHandler(context);
+
+        ServletHolder jerseyServlet = context.addServlet(
+                org.glassfish.jersey.servlet.ServletContainer.class, "/*");
+        jerseyServlet.setInitOrder(0);
+
+        jerseyServlet.setInitParameter(
+                "jersey.config.server.provider.classnames",
+                Calculator.class.getCanonicalName());
+        
         server.start();
-        server.join();
 
         A = new double[totalSize];
         // call boostrap
         bootstrap();
         processing();
         aggregation();
+
+        server.join();
+
     }
 
 	private static void bootstrap(){
@@ -80,10 +96,9 @@ public class Main extends AbstractHandler
     }
     //main loop
     private static void processing(){
-
-
+        System.out.println("hiww");
         //initialize hardware_monitor thread
-        HardwareMonitor hardwareMonitor = new HardwareMonitor();
+        HardwareMonitor hardwareMonitor = new HardwareMonitor(count++);
         Thread hardwareMonitorThread = new Thread(hardwareMonitor);
         hardwareMonitorThread.start();
 
