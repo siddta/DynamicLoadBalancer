@@ -10,6 +10,10 @@ public class Adaptor {
 
     //Adaptor decides whether to transfer a job or continue with working thread
 
+    //Adaptor will follow sender-initiated algorithm
+    //!!!!! A basic transfer policy: totalJobsRemaining = localState.pendingJobs + remoteState.pendingJobs
+    // if localSate.pendingJObs / (double) totalJobsRemaining > some percentage, transfer until local percent = 40, remote percent = 60 (or something)
+
     //Adaptor sends transfer decision to transfer manager (YES/NO)
     //Adaptor sends throttling info to worker thread
 }
