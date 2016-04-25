@@ -1,4 +1,4 @@
-package mp4;
+package loadbalancer;
 
 /**
  * Created by eideh on 4/23/2016.

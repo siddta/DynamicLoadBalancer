@@ -1,4 +1,4 @@
-package mp4;
+package loadbalancer;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -31,7 +31,8 @@ public class WorkerThread implements Runnable {
         try {
             while (true) {
                 //take() from queue
-                jobQueue.take();
+                Job job=jobQueue.take();
+                job.execute();
             }
         } catch (InterruptedException e) {
             //if interrupted while taking

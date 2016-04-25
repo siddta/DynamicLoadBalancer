@@ -1,4 +1,4 @@
-package mp4;
+package loadbalancer;
 
 import java.util.concurrent.BlockingQueue;
 
