@@ -23,7 +23,7 @@ public class HttpConnection {
 	public static void main(String[] args) throws Exception {
 
 		HttpConnection http = new HttpConnection();
-//		http.sendGet("getState");
+		http.sendGet("getState");
 		State state= new State();
 		state.setCpuUsePercent(40.0);
 		http.sendPost("submitState", mapper.writeValueAsString(state));

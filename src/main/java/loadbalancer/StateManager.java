@@ -29,6 +29,9 @@ public class StateManager implements Runnable {
                 localState.setPendingJobs(jobQueue.size());
                 //localState.setThrottlingValue();
                 localState.setCpuUsePercent(hardwareMonitor.cpuUsePercentage);
+
+                Thread.sleep(10);
+
             }
         } catch (Exception e) {
         }

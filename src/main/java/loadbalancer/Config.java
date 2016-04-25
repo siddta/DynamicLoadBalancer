@@ -16,6 +16,7 @@ public class Config {
 	 public static String mode="Local";
 	 public static double localThreshold=75;
 	 public static boolean shouldStartProcessing=false;
-		 
+	 public static final Object QUEUE_LOCK = new Object();
+
 	
 }

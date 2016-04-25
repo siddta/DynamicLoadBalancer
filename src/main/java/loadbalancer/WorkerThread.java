@@ -2,6 +2,8 @@ package loadbalancer;
 
 import java.util.concurrent.BlockingQueue;
 
+import static loadbalancer.Config.QUEUE_LOCK;
+
 /**
  * Created by eideh on 4/23/2016.
  */
@@ -30,9 +32,13 @@ public class WorkerThread implements Runnable {
         //main queue processing
         try {
             while (true) {
-                //take() from queue
-                Job job=jobQueue.take();
-                job.execute();
+                synchronized (QUEUE_LOCK) {
+                    //take() from queue
+                    Job job = jobQueue.take();
+                    //job.execute();
+                    executeJob(job);
+                }
+                Thread.sleep(10);
             }
         } catch (InterruptedException e) {
             //if interrupted while taking

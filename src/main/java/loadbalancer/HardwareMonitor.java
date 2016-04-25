@@ -17,6 +17,13 @@ public class HardwareMonitor implements Runnable {
     public void run() {
         while(true){
             //maybe sleep for awhile?
+            try
+            {
+                Thread.sleep(500L);
+            } catch (Exception e)
+            {
+                // TODO: handle exception
+            }
             getSystemStatistics();
         }
     }
@@ -27,15 +34,14 @@ public class HardwareMonitor implements Runnable {
         CpuPerc cpuperc = null;
         FileSystemUsage filesystemusage = null;
         try {
-            mem = sigar.getMem();
+            //mem = sigar.getMem();
             cpuperc = sigar.getCpuPerc();
-            filesystemusage = sigar.getFileSystemUsage("C:");
+            //filesystemusage = sigar.getFileSystemUsage("C:");
         } catch (SigarException se) {
             se.printStackTrace();
         }
-
-
-        System.out.print(mem.getUsedPercent()+"\t");
-        System.out.print((cpuperc.getCombined()*100)+"\t");
-        System.out.print(filesystemusage.getUsePercent()+"\n");
-    }}
+        //System.out.print(mem.getUsedPercent()+"\t");
+        System.out.print( "CPU Usage " +(cpuperc.getCombined()*100)+"\n");
+        //System.out.print(filesystemusage.getUsePercent()+"\n");
+    }
+}
