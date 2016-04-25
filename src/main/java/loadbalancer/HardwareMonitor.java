@@ -12,14 +12,19 @@ public class HardwareMonitor implements Runnable {
 
     //http://stackoverflow.com/questions/28039533/how-to-find-total-cpu-utilisation-in-java-using-sigar
     private static Sigar sigar = new Sigar();
-
-    public volatile double cpuUsePercentage; //not sure about volatile to share this runnable variable with statemanager
+    private StateManager stateManager;
+    
+    public HardwareMonitor(StateManager stateManager)
+    {
+    	this.stateManager=stateManager;
+    }
+   
     public void run() {
         while(true){
             //maybe sleep for awhile?
             try
             {
-                Thread.sleep(500L);
+                Thread.sleep(Config.hardwareMontiorSleeptime);
             } catch (Exception e)
             {
                 // TODO: handle exception
@@ -36,6 +41,7 @@ public class HardwareMonitor implements Runnable {
         try {
             //mem = sigar.getMem();
             cpuperc = sigar.getCpuPerc();
+            stateManager.localState.cpuUsePercent=cpuperc.getCombined()*100;
             //filesystemusage = sigar.getFileSystemUsage("C:");
         } catch (SigarException se) {
             se.printStackTrace();

@@ -8,8 +8,8 @@ import java.util.concurrent.BlockingQueue;
  * Created by eideh on 4/23/2016.
  */
 public class StateManager implements Runnable {
-    public State localState;
-    public State remoteState;
+    public static State localState;
+    public static State remoteState;
     public BlockingQueue<Job> jobQueue;
     private HardwareMonitor hardwareMonitor;
 
@@ -27,16 +27,35 @@ public class StateManager implements Runnable {
             while (true) {
                 //take() from queue
                 localState.setPendingJobs(jobQueue.size());
-                //localState.setThrottlingValue();
-                localState.setCpuUsePercent(hardwareMonitor.cpuUsePercentage);
-
-                Thread.sleep(10);
+                sendLocalStatetoRemoteServer();
+                Thread.sleep(Config.stateManagerSleeptime);
 
             }
         } catch (Exception e) {
         }
     }
 
-    //stateManager is a thread that gets info from other threads it seems
+
+	/**
+	 * @throws Exception 
+	 * 
+	 */
+	public static void sendLocalStatetoRemoteServer() throws Exception {
+		HttpConnection.sendPost("submitState",localState);
+		
+	}
+
+	
+	public static void updateRemoteState(State state) throws Exception {
+		remoteState=state;
+		
+	}
+	
+	public static void updateThreshold(double throttlingValue) throws Exception {
+		localState.throttlingValue=throttlingValue;
+		sendLocalStatetoRemoteServer();
+		
+	}
+
 
 }

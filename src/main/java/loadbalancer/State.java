@@ -3,7 +3,7 @@ package loadbalancer;
 public class State{
 	
 	int pendingJobs;
-    int throttlingValue;
+    double throttlingValue;
     double cpuUsePercent;
     int stage=0;  // 0=boostrap, 1=processing, 2=aggregation, 3=done.
     
@@ -29,7 +29,7 @@ public class State{
 	/**
 	 * @return the throttlingValue
 	 */
-	public int getThrottlingValue() {
+	public double getThrottlingValue() {
 		return throttlingValue;
 	}
 
@@ -38,7 +38,7 @@ public class State{
 	/**
 	 * @param throttlingValue the throttlingValue to set
 	 */
-	public void setThrottlingValue(int throttlingValue) {
+	public void setThrottlingValue(double throttlingValue) {
 		this.throttlingValue = throttlingValue;
 	}
 

@@ -17,6 +17,9 @@ public class Config {
 	 public static double localThreshold=75;
 	 public static boolean shouldStartProcessing=false;
 	 public static final Object QUEUE_LOCK = new Object();
+	 public static final int hardwareMontiorSleeptime = 500;
+	 public static final int stateManagerSleeptime = 100;
+	 public static  int adaptor_policy = 0;  // 0=send, 1=receive, 2=mixed
 
 	
 }

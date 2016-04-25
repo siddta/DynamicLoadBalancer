@@ -1,6 +1,11 @@
 package loadbalancer;
 
+import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import static loadbalancer.Config.QUEUE_LOCK;
 
@@ -8,31 +13,41 @@ import static loadbalancer.Config.QUEUE_LOCK;
  * Transfers jobs between phones
  * Created by eideh on 4/23/2016.
  */
-public class TransferManager implements Runnable {
+public class TransferManager{
+	private static ObjectMapper mapper = new ObjectMapper();
 
-    public BlockingQueue<Job> transferQueue;
+	
+	public static void sendJobs() throws InterruptedException, Exception{
+	State localState=StateManager.localState;
+	State remoteState=StateManager.remoteState;
+	int totaljobs=(localState.pendingJobs+remoteState.pendingJobs);
+	int additionalremoteJobsNeeded= (int) ((remoteState.throttlingValue*totaljobs)/(localState.throttlingValue+remoteState.throttlingValue))-remoteState.pendingJobs;
+	synchronized (Config.QUEUE_LOCK) {	
+	while(additionalremoteJobsNeeded>0){
+		HttpConnection.sendPost("addJob",Main.jobQueue.take());
+		additionalremoteJobsNeeded--;
+	}
+	
+	}
+		
 
+}
+	
+ 
+	public static void receiveJobs() throws JsonParseException, JsonMappingException, InterruptedException, IOException, Exception{
+		State localState=StateManager.localState;
+		State remoteState=StateManager.remoteState;
+		int totaljobs=(localState.pendingJobs+remoteState.pendingJobs);
+		int additionalremoteJobsPresent= (int) ((remoteState.throttlingValue*totaljobs)/(localState.throttlingValue+remoteState.throttlingValue))-remoteState.pendingJobs;
+		synchronized (Config.QUEUE_LOCK) {	
+		while(additionalremoteJobsPresent>0){
+			Main.jobQueue.put(mapper.readValue(HttpConnection.sendGet("getJob"),Job.class));
+			additionalremoteJobsPresent--;
+		}
+		
+	
+	}
+ 
+}
 
-    public TransferManager(BlockingQueue<Job> transferQueue){
-        this.transferQueue = transferQueue;
-    }
-
-
-    public void run() {
-        //main queue processing
-        try {
-            while (true) {
-                //take() from queue
-                synchronized (QUEUE_LOCK) {
-                    while (Main.transferSize > 0) {
-                        Job job = transferQueue.take();
-                        HttpConnection.sendPost("addJob", job);
-                    }
-                }
-                Thread.sleep(10);
-            }
-        } catch (Exception e) {
-            //if interrupted while taking
-        }
-    }
 }

@@ -31,6 +31,22 @@ public class RequestHandlers {
 	}
 
 	
+	@GET
+	@Path("/getjob")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getjob() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
+		System.out.println("Received get job request");
+		String response="";
+		synchronized (Config.QUEUE_LOCK) {
+			if(Main.jobQueue.size()>0){
+			 response=mapper.writeValueAsString(Main.jobQueue.take());
+			}
+		}
+	 return response;
+		
+	}
+	
+	
 	@POST
 	@Path("/submitState")
 	@Consumes(MediaType.TEXT_PLAIN)

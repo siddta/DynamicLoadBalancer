@@ -30,17 +30,16 @@ import org.glassfish.jersey.servlet.ServletContainer;
  */
 public class Main
 {
-
 	private static String mode="Local";
 	private static double[] A;
     private final static int jobSize = 8192; //1024*1024*4/512
     private final static int totalSize = 4194304; //1024*1024*4
-    private static BlockingQueue<Job> jobQueue = new LinkedBlockingQueue<Job>(); // do we need a blocking queue?
+    public static BlockingQueue<Job> jobQueue = new LinkedBlockingQueue<Job>(); // do we need a blocking queue?
     private static StateManager stateManager;
     private static HardwareMonitor hardwareMonitor;
     private static TransferManager transferManager;
     public static ArrayList<Job> processedJobList = new ArrayList<Job>();
-    public static int transferSize = 0;
+    
    
 
     public static void main(String[] args) throws Exception
@@ -60,8 +59,7 @@ public class Main
         	     bootstrap();   
         	     processing();
         	     aggregation();
-                 stateManager.localState.stage=3;
-             }
+    	     }
     	     
     	     server.join();
     	     
@@ -103,7 +101,7 @@ public class Main
         		Thread.sleep(10);
         	}
         }       
-        
+      
         
     }
     //main loop
@@ -140,7 +138,6 @@ public class Main
     }
 
     private static void aggregation() throws Exception{
-        stateManager.localState.stage=2;
         if(mode.equals("Remote")){
         	HttpConnection.sendPost("submitAggregatedResults",processedJobList);
         }
