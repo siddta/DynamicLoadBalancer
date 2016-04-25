@@ -11,7 +11,7 @@ import org.hyperic.sigar.*;
 public class HardwareMonitor implements Runnable {
 
     //http://stackoverflow.com/questions/28039533/how-to-find-total-cpu-utilisation-in-java-using-sigar
-    private static Sigar sigar = new Sigar();
+ //   private static Sigar sigar = new Sigar();
     private StateManager stateManager;
     
     public HardwareMonitor(StateManager stateManager)
@@ -35,19 +35,19 @@ public class HardwareMonitor implements Runnable {
 
 
     public void getSystemStatistics(){
-        Mem mem = null;
+    /*    Mem mem = null;
         CpuPerc cpuperc = null;
         FileSystemUsage filesystemusage = null;
         try {
             //mem = sigar.getMem();
             cpuperc = sigar.getCpuPerc();
-            stateManager.localState.cpuUsePercent=cpuperc.getCombined()*100;
+            stateManager.localState.cpuUsePercent=cpuperc.getCombined();
             //filesystemusage = sigar.getFileSystemUsage("C:");
         } catch (SigarException se) {
             se.printStackTrace();
         }
         //System.out.print(mem.getUsedPercent()+"\t");
-        System.out.print( "CPU Usage " +(cpuperc.getCombined()*100)+"\n");
+        System.out.print( "CPU Usage " +(cpuperc.getCombined())+"\n");
         //System.out.print(filesystemusage.getUsePercent()+"\n");
-    }
+*/    }
 }

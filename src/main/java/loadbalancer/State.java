@@ -2,10 +2,10 @@ package loadbalancer;
 
 public class State{
 	
-	int pendingJobs;
-    double throttlingValue;
-    double cpuUsePercent;
-    int stage=0;  // 0=boostrap, 1=processing, 2=aggregation, 3=done.
+	public int pendingJobs;
+    public double throttlingValue;
+    public double cpuUsePercent;
+    public int stage=0;  // 0=boostrap, 1=processing, 2=aggregation, 3=done.
     
 
     /**

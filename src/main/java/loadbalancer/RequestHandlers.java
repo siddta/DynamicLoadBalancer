@@ -20,26 +20,29 @@ import org.codehaus.jackson.type.TypeReference;
 @Path("requests")
 public class RequestHandlers {
 	private ObjectMapper mapper = new ObjectMapper();
+	public StateManager stateManager;
 
+	
 	@POST
-	@Path("/addjob")
+	@Path("/addJob")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public String addjob(String json) throws JsonParseException, JsonMappingException, IOException {
-		System.out.println("Received add job request:"+ json);
+	public void addjob(String json) throws JsonParseException, JsonMappingException, IOException {	
 		Job job = mapper.readValue(json,Job.class);
-		return "got the job";
+		Main.jobQueue.add(job);
+		System.out.println("Received Job with Id:"+job.getJobId());
+		
 	}
 
 	
 	@GET
-	@Path("/getjob")
+	@Path("/getJob")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getjob() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
 		System.out.println("Received get job request");
 		String response="";
 		synchronized (Config.QUEUE_LOCK) {
 			if(Main.jobQueue.size()>0){
-			 response=mapper.writeValueAsString(Main.jobQueue.take());
+			 response=mapper.writeValueAsString(Main.jobQueue.remove());
 			}
 		}
 	 return response;
@@ -50,9 +53,11 @@ public class RequestHandlers {
 	@POST
 	@Path("/submitState")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public String submitState(String json) throws JsonParseException, JsonMappingException, IOException {
-		System.out.println("Received submit state request:"+ json);
+	public String submitState(String json) throws Exception {
+		if(Config.mode=="local")
+		System.out.println(json);
 		State state = mapper.readValue(json,State.class);
+		Main.stateManager.updateRemoteState(state);	
 		return "got the state";
 
 	}
@@ -61,8 +66,9 @@ public class RequestHandlers {
 	@POST
 	@Path("/setThreshold")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public String setThreshold(double threshold) {
-		System.out.println("Received set threshold request:"+ threshold);
+	public String setThreshold(String thresholdString) throws Exception {
+		double threshold=Double.parseDouble(thresholdString);
+		Main.stateManager.updateThreshold(threshold);
 		return "threshold set";
 
 	}
@@ -71,7 +77,6 @@ public class RequestHandlers {
 	@Path("/submitAggregatedResults")
 	@Consumes(MediaType.TEXT_PLAIN)
 	public String submitAggregatedData(String json) throws JsonParseException, JsonMappingException, IOException {
-		System.out.println("Received aggregated results request:"+ json);
 		List<Job> jobs = mapper.readValue(json, new TypeReference<List<Job>>(){});
 		for(Job job:jobs){
 			Main.processedJobList.add(job);
@@ -85,8 +90,7 @@ public class RequestHandlers {
 	@Path("/getState")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getState() throws JsonGenerationException, JsonMappingException, IOException {
-		System.out.println("Received get state request");
-		State state= new State();
+		State state = Main.stateManager.localState;
 		return mapper.writeValueAsString(state);
 	}
 	

@@ -17,10 +17,14 @@ public class Job {
     	this.jobId=jobId;
         this.start_index = start;
         this.end_index = end;
-        values= new double [10];
+        values= new double [Config.jobSize];
         for(int i=0;i<Config.jobSize;i++){
         	values[i]=1.11111;
         }        
+    	System.out.println(this.jobId);
+    }
+    public Job(){
+    	
     }
     
     public void setDone(){
@@ -32,11 +36,7 @@ public class Job {
     }
     
      
-    public void print(){
-    	for(int i=0;i<Config.jobSize;i++)
-    		System.out.println("JobId:"+jobId+"\t"+"Element:"+i+"\t"+"value:"+values[i]+"\n");
-        } 
-    
+  
     /**
    	 * @return the jobId
    	 */

@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -54,9 +53,7 @@ public class HttpConnection {
 			response.append(inputLine);
 		}
 		in.close();
-		System.out.println(response);
-
-		return response.toString();
+	   return response.toString();
 
 	}
 	
@@ -78,8 +75,8 @@ public class HttpConnection {
 		wr.close();
 
 		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'POST' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
+//		System.out.println("\nSending 'POST' request to URL : " + url);
+//		System.out.println("Response Code : " + responseCode);
 
 		BufferedReader in = new BufferedReader(
 		        new InputStreamReader(con.getInputStream()));
@@ -90,8 +87,7 @@ public class HttpConnection {
 			response.append(inputLine);
 		}
 		in.close();
-		System.out.println(response);
-		
+			
 		return response.toString();
 
 	}

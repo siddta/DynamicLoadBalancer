@@ -5,18 +5,19 @@ package loadbalancer;
  */
 public class Adaptor {
 
+	public Main main;
 	
 	public void apply_transfer_policy() throws InterruptedException, Exception{
 		if(Config.adaptor_policy==0){
-			TransferManager.sendJobs();
+			main.transferManager.sendJobs();
 		}
 		else if (Config.adaptor_policy==1)
 		{
-			TransferManager.receiveJobs();
+			main.transferManager.receiveJobs();
 		}
 		else{
-			TransferManager.sendJobs();
-			TransferManager.receiveJobs();
+			main.transferManager.sendJobs();
+			main.transferManager.receiveJobs();
 		}
 		
 	}

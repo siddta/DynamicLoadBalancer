@@ -9,46 +9,49 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import static loadbalancer.Config.QUEUE_LOCK;
 
-/**
- * Transfers jobs between phones
- * Created by eideh on 4/23/2016.
- */
 public class TransferManager{
 	private static ObjectMapper mapper = new ObjectMapper();
-
-	
-	public static void sendJobs() throws InterruptedException, Exception{
-	State localState=StateManager.localState;
-	State remoteState=StateManager.remoteState;
+		
+	public  void sendJobs() throws InterruptedException, Exception{
+	System.out.println(Config.mode+":TransferManager send jobs called");
+	State localState=Main.stateManager.localState;
+	State remoteState=Main.stateManager.remoteState;
 	int totaljobs=(localState.pendingJobs+remoteState.pendingJobs);
 	if (totaljobs < 50)
 		return;
 	int additionalremoteJobsNeeded= (int) ((remoteState.throttlingValue*totaljobs)/(localState.throttlingValue+remoteState.throttlingValue))-remoteState.pendingJobs;
 	synchronized (Config.QUEUE_LOCK) {	
 	while(additionalremoteJobsNeeded>0){
-		HttpConnection.sendPost("addJob",Main.jobQueue.take());
+		Job job=Main.jobQueue.remove();
+		HttpConnection.sendPost("addJob",job);
+		System.out.println(Config.mode+":TransferManager sent job with id:"+job.getJobId());
 		additionalremoteJobsNeeded--;
 	}
 	
 	}
-		
+	
+	System.out.println(Config.mode+":TransferManager send jobs finished");
 
 }
 	
- public static void receiveJobs() throws JsonParseException, JsonMappingException, InterruptedException, IOException, Exception{
-		State localState=StateManager.localState;
-		State remoteState=StateManager.remoteState;
+ public  void receiveJobs() throws JsonParseException, JsonMappingException, InterruptedException, IOException, Exception{
+	   System.out.println(Config.mode+":TransferManager receive jobs called");
+		State localState=Main.stateManager.localState;
+		State remoteState=Main.stateManager.remoteState;
 		int totaljobs=(localState.pendingJobs+remoteState.pendingJobs);
 		if (totaljobs < 50)
 			return;
 		int additionalremoteJobsPresent= (int) ((remoteState.throttlingValue*totaljobs)/(localState.throttlingValue+remoteState.throttlingValue))-remoteState.pendingJobs;
 		synchronized (Config.QUEUE_LOCK) {	
 		while(additionalremoteJobsPresent>0){
-			Main.jobQueue.put(mapper.readValue(HttpConnection.sendGet("getJob"),Job.class));
+			Job job=mapper.readValue(HttpConnection.sendGet("getJob"),Job.class);
+			Main.jobQueue.add(mapper.readValue(HttpConnection.sendGet("getJob"),Job.class));
+			System.out.println(Config.mode+":TransferManager received job with id:"+job.getJobId());
 			additionalremoteJobsPresent--;
 		}
 		
-	
+		   System.out.println(Config.mode+":TransferManager receive jobs finhsed");
+		   
 	}
  
 }
