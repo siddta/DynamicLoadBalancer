@@ -30,18 +30,11 @@ import org.glassfish.jersey.servlet.ServletContainer;
  */
 public class Main
 {
-	private static String mode="Local";
-	private static double[] A;
-    private final static int jobSize = 8192; //1024*1024*4/512
-    private final static int totalSize = 4194304; //1024*1024*4
     public static BlockingQueue<Job> jobQueue = new LinkedBlockingQueue<Job>(); // do we need a blocking queue?
     private static StateManager stateManager;
     private static HardwareMonitor hardwareMonitor;
-    private static TransferManager transferManager;
     public static ArrayList<Job> processedJobList = new ArrayList<Job>();
-    
-   
-
+ 
     public static void main(String[] args) throws Exception
     {
     	ResourceConfig config = new ResourceConfig();
@@ -70,21 +63,21 @@ public class Main
     }
 
 	private static void bootstrap() throws Exception{
-		
-		hardwareMonitor = new HardwareMonitor();
-        stateManager=new StateManager(jobQueue, hardwareMonitor);
-        transferManager=new TransferManager(jobQueue);
+	    stateManager=new StateManager();
+		hardwareMonitor = new HardwareMonitor(stateManager);
+     
+      
         
         if( Config.mode.equals("local")){
             //Create the 512 jobs (add them to queue)
             //eg jobSize = 10
             //(start = 0, end = 9)
             //(start = 10, end = 19)
-            for(int i = 0; i < totalSize; i+=jobSize){
+            for(int i = 0; i < Config.totalSize; i+=Config.jobSize){
                 int start = 0;
-                int end = i+(jobSize-1);
-                Job job = new Job(i%jobSize,start,end);
-                while(i<totalSize/2){
+                int end = i+(Config.jobSize-1);
+                Job job = new Job(i%Config.jobSize,start,end);
+                while(i<Config.totalSize/2){
                 	HttpConnection.sendPost("addJob",job);
                 }
                 try {
@@ -109,13 +102,7 @@ public class Main
 	
   private static void processing(){
 	  	stateManager.localState.stage=1;
-   
-        //initialize transfer_manager thread
-        //should the transferManager have a different queue??
-        //should the transferManager even be its own thread, or just part of the adaptor thread?
-        Thread transferThread = new Thread(new TransferManager(jobQueue));
-        transferThread.start();
-        
+         
         //initialize worker_thread
         Thread workerThread = new Thread(new WorkerThread(jobQueue, 70));
         workerThread.start();
@@ -125,23 +112,16 @@ public class Main
         hardwareMonitorThread.start();
         
         //initialize state_manager thread
-        Thread stateManagerThread = new Thread(new StateManager(jobQueue, hardwareMonitor));
+        Thread stateManagerThread = new Thread(stateManager);
         stateManagerThread.start();
 
-       
-        //initialize Adaptor(state_manager, hardware_monitor, transfer_manager, worker_thread)
-        //Adaptor should have callbacks from state_manager and hardware_monitor threads
-        //and should be able to call stuff in transfer_manger and worker_thread
-
-        //while queue is not empty
-            //run adaptor algorithm
     }
 
     private static void aggregation() throws Exception{
-        if(mode.equals("Remote")){
+        if(Config.mode.equals("Remote")){
         	HttpConnection.sendPost("submitAggregatedResults",processedJobList);
         }
-        if(mode.equals("Local")){
+        if(Config.mode.equals("Local")){
            while(stateManager.remoteState.stage<3)
            {
         	   Thread.sleep(10);

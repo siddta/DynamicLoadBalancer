@@ -10,23 +10,14 @@ import java.util.concurrent.BlockingQueue;
 public class StateManager implements Runnable {
     public static State localState;
     public static State remoteState;
-    public BlockingQueue<Job> jobQueue;
     private HardwareMonitor hardwareMonitor;
-
-    public StateManager(BlockingQueue<Job> jobQueue, HardwareMonitor hardwareMonitor){
-        this.jobQueue = jobQueue;
-        this.hardwareMonitor = hardwareMonitor;
-        // initialize local state and remote state
-        
-    }
-
 
     public void run() {
         //main queue processing
         try {
             while (true) {
                 //take() from queue
-                localState.setPendingJobs(jobQueue.size());
+                localState.setPendingJobs(Main.jobQueue.size());
                 sendLocalStatetoRemoteServer();
                 Thread.sleep(Config.stateManagerSleeptime);
 

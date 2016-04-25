@@ -31,9 +31,6 @@ public class HttpConnection {
 	}
 	
 	
-	
-	
-
 	// HTTP GET request
 	public static String sendGet(String path) throws Exception {
 
