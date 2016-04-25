@@ -38,4 +38,15 @@ public class WorkerThread implements Runnable {
             //if interrupted while taking
         }
     }
+    
+    public void executeJob(Job job){
+    	double [] values=job.getValues();
+    	for(int i=0;i<Config.jobSize;i++)
+    		for(int j=0;j<Config.sum_iteration;j++){{
+        	values[i]+=1.11111;
+        } 
+    }
+    	job.setValues(values);
+    	Main.processedJobList.add(job);
+    }
 }

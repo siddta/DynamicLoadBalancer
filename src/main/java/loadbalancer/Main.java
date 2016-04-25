@@ -4,6 +4,9 @@
 package loadbalancer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -35,6 +38,8 @@ public class Main
     private static StateManager stateManager;
     private static HardwareMonitor hardwareMonitor;
     private static TransferManager transferManager;
+    public static ArrayList<Job> processedJobList = new ArrayList<Job>();
+    
    
 
     public static void main(String[] args) throws Exception
@@ -53,6 +58,7 @@ public class Main
         	     Config.localThreshold=Double.parseDouble(args[1]);
         	     bootstrap();   
         	     processing();
+        	     aggregation();
     	     }
     	     
     	     server.join();
@@ -131,13 +137,30 @@ public class Main
             //run adaptor algorithm
     }
 
-    private static void aggregation(){
+    private static void aggregation() throws Exception{
         if(mode.equals("Remote")){
-            //send all data back to local
+        	HttpConnection.sendPost("submitAggregatedResults",processedJobList);
         }
         if(mode.equals("Local")){
-            //wait for all data from remote, then display data
-            //is there a wait for reply command?
+           while(stateManager.remoteState.stage<3)
+           {
+        	   Thread.sleep(10);
+           }
+         
+           Collections.sort(processedJobList,new Comparator<Job>() {
+			public int compare(Job a, Job b) {
+				return (Integer.valueOf(a.getJobId()).compareTo(b.getJobId()));
+			}});
+           
         }
-    }
+        
+        for(Job b:processedJobList){
+        	double [] values=b.getValues();
+        	int offset=b.getJobId()*Config.jobSize;
+        	for(int i=0;i<Config.jobSize;i++)
+    		System.out.println("JobId:"+b.getJobId()+"\t"+"Element:"+(offset+i)+"\t"+"value:"+values[i]+"\n");
+        } 
+        }
+        
 }
+    

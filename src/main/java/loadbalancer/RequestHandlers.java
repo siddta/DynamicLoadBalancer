@@ -52,11 +52,15 @@ public class RequestHandlers {
 	}
 	
 	@POST
-	@Path("/submitAggregatedData")
+	@Path("/submitAggregatedResults")
 	@Consumes(MediaType.TEXT_PLAIN)
 	public String submitAggregatedData(String json) throws JsonParseException, JsonMappingException, IOException {
 		System.out.println("Received aggregated results request:"+ json);
 		List<Job> jobs = mapper.readValue(json, new TypeReference<List<Job>>(){});
+		for(Job job:jobs){
+			Main.processedJobList.add(job);
+		}
+		
 		return "got jobs";
 	}
 	
