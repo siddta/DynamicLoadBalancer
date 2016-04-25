@@ -30,6 +30,12 @@
      <version>2.7</version>
  </dependency>
 
+<dependency>
+	<groupId>org.fusesource</groupId>
+	<artifactId>sigar</artifactId>
+	<version>1.6.4</version>
+</dependency>
+
 
 <dependency>
      <groupId>org.glassfish.jersey.containers</groupId>
@@ -51,5 +57,39 @@
  </dependency>
 		
 </dependencies>
+
+    <build>
+        <plugins>
+	   <plugin>
+	   <artifactId>maven-assembly-plugin</artifactId>
+      <configuration>
+        <archive>
+          <manifest>
+            <mainClass>fully.qualified.MainClass</mainClass>
+          </manifest>
+        </archive>
+        <descriptorRefs>
+          <descriptorRef>jar-with-dependencies</descriptorRef>
+        </descriptorRefs>
+      </configuration>
+    </plugin>
+    
+     <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <configuration>
+        <archive>
+          <manifest>
+            <addClasspath>true</addClasspath>
+            <mainClass>fully.qualified.MainClass</mainClass>
+          </manifest>
+        </archive>
+      </configuration>
+  
+    </plugin>
+	
+        </plugins>
+      </build>
+
 
 </project>
