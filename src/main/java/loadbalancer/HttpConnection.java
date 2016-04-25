@@ -34,7 +34,8 @@ public class HttpConnection {
 	public static String sendGet(String path) throws Exception {
 
 		String url = Config.remoteHost+"/"+path;
-		
+		if(Config.mode.equals("remote"))
+			url = Config.localHost+"/"+path;
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -62,6 +63,8 @@ public class HttpConnection {
 
 		String body=mapper.writeValueAsString(postBody);	
 		String url = Config.remoteHost+"/"+path;
+		if(Config.mode.equals("remote"))
+			url = Config.localHost+"/"+path;
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("POST");

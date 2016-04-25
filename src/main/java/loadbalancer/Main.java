@@ -136,15 +136,14 @@ public class Main
     	System.out.println(Config.mode+":Aggregation called");
         if(Config.mode.equals("remote")){
         	HttpConnection.sendPost("submitAggregatedResults",processedJobList);
-        	stateManager.localState.stage=3;
-        	stateManager.sendLocalStatetoRemoteServer();
+        	StateManager.localState.stage=3;
+        	StateManager.sendLocalStatetoRemoteServer();
         	Thread.sleep(10000);
         	System.out.println("Remote Finished!");
         }
         if(Config.mode.equals("local")){
-           while(stateManager.remoteState.stage<3)
+           while(StateManager.remoteState.stage<3)
            {
-        //	   System.out.println(stateManager.remoteState.stage);
         	   Thread.sleep(10);
            }
          

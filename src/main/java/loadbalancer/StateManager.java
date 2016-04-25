@@ -3,8 +3,8 @@ package loadbalancer;
 import org.codehaus.jackson.map.ObjectMapper;
 
 public class StateManager implements Runnable {
-    public  State localState;
-    public  State remoteState;
+    public static  State localState;
+    public static State remoteState;
     private ObjectMapper mapper = new ObjectMapper();
     public Main main;
   
@@ -24,9 +24,10 @@ public class StateManager implements Runnable {
         }
     }
 
-	public  void sendLocalStatetoRemoteServer() throws Exception {
+	public static void sendLocalStatetoRemoteServer() throws Exception {
 		try{
-		HttpConnection.sendPost("submitState",localState);
+	
+			HttpConnection.sendPost("submitState",localState);
 		}
 		catch(Exception e)
 		{
