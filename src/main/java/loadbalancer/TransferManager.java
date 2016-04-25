@@ -21,6 +21,8 @@ public class TransferManager{
 	State localState=StateManager.localState;
 	State remoteState=StateManager.remoteState;
 	int totaljobs=(localState.pendingJobs+remoteState.pendingJobs);
+	if (totaljobs < 50)
+		return;
 	int additionalremoteJobsNeeded= (int) ((remoteState.throttlingValue*totaljobs)/(localState.throttlingValue+remoteState.throttlingValue))-remoteState.pendingJobs;
 	synchronized (Config.QUEUE_LOCK) {	
 	while(additionalremoteJobsNeeded>0){
@@ -33,11 +35,12 @@ public class TransferManager{
 
 }
 	
- 
-	public static void receiveJobs() throws JsonParseException, JsonMappingException, InterruptedException, IOException, Exception{
+ public static void receiveJobs() throws JsonParseException, JsonMappingException, InterruptedException, IOException, Exception{
 		State localState=StateManager.localState;
 		State remoteState=StateManager.remoteState;
 		int totaljobs=(localState.pendingJobs+remoteState.pendingJobs);
+		if (totaljobs < 50)
+			return;
 		int additionalremoteJobsPresent= (int) ((remoteState.throttlingValue*totaljobs)/(localState.throttlingValue+remoteState.throttlingValue))-remoteState.pendingJobs;
 		synchronized (Config.QUEUE_LOCK) {	
 		while(additionalremoteJobsPresent>0){

@@ -45,11 +45,11 @@ public class Main
     public static void main(String[] args) throws Exception
     {
     	ResourceConfig config = new ResourceConfig();
-    	 config.packages("loadbalancer");
-    	 ServletHolder servlet = new ServletHolder(new ServletContainer(config));
+    	config.packages("loadbalancer");
+    	ServletHolder servlet = new ServletHolder(new ServletContainer(config));
        	Server server = new Server(3333);
-    	 ServletContextHandler context = new ServletContextHandler(server, "/*");
-    	 context.addServlet(servlet, "/*");
+    	ServletContextHandler context = new ServletContextHandler(server, "/*");
+    	context.addServlet(servlet, "/*");
     	 
     	try {
     	     server.start();
