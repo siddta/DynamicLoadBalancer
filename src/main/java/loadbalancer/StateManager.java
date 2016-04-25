@@ -8,14 +8,16 @@ import java.util.concurrent.BlockingQueue;
  * Created by eideh on 4/23/2016.
  */
 public class StateManager implements Runnable {
-    private State localState;
-    private State remoteState;
+    public State localState;
+    public State remoteState;
     public BlockingQueue<Job> jobQueue;
     private HardwareMonitor hardwareMonitor;
 
     public StateManager(BlockingQueue<Job> jobQueue, HardwareMonitor hardwareMonitor){
         this.jobQueue = jobQueue;
         this.hardwareMonitor = hardwareMonitor;
+        // initialize local state and remote state
+        
     }
 
 

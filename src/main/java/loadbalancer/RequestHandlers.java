@@ -70,5 +70,16 @@ public class RequestHandlers {
 		return mapper.writeValueAsString(state);
 	}
 	
+	
+	@GET
+	@Path("/startProcessing")
+	@Consumes(MediaType.TEXT_PLAIN)
+	public boolean startProcessing() throws JsonGenerationException, JsonMappingException, IOException {
+		Config.shouldStartProcessing=true;
+		return true;
+	}
+	
+	
+	
 
 }

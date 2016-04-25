@@ -35,9 +35,9 @@ public class HttpConnection {
 	
 
 	// HTTP GET request
-	private String sendGet(String path) throws Exception {
+	public static String sendGet(String path) throws Exception {
 
-		String url = config.remoteHost+"/"+path;
+		String url = Config.remoteHost+"/"+path;
 		
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -64,9 +64,10 @@ public class HttpConnection {
 	}
 	
 	// HTTP POST request
-	private String sendPost(String path, String body) throws Exception {
+	public static String sendPost(String path, Object postBody) throws Exception {
 
-		String url = config.remoteHost+"/"+path;
+		String body=mapper.writeValueAsString(postBody);	
+		String url = Config.remoteHost+"/"+path;
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("POST");

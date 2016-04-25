@@ -16,7 +16,7 @@ public class Job {
         this.start_index = start;
         this.end_index = end;
         values= new double [10];
-        for(int i=0;i<config.jobSize;i++){
+        for(int i=0;i<Config.jobSize;i++){
         	values[i]=1.11111;
         }        
     }
@@ -30,15 +30,15 @@ public class Job {
     }
     
     public void execute(){
-    	for(int i=0;i<config.jobSize;i++)
-    		for(int j=0;j<config.sum_iteration;j++){{
+    	for(int i=0;i<Config.jobSize;i++)
+    		for(int j=0;j<Config.sum_iteration;j++){{
         	values[i]+=1.11111;
         } 
     }
     }
     
     public void print(){
-    	for(int i=0;i<config.jobSize;i++)
+    	for(int i=0;i<Config.jobSize;i++)
     		System.out.println("JobId:"+jobId+"\t"+"Element:"+i+"\t"+"value:"+values[i]+"\n");
         } 
     }
