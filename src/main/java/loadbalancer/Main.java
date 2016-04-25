@@ -38,8 +38,13 @@ public class Main
     	Main main = new Main();
     	
     	if(args.length > 0) {
+			//local .75 0
+			//remote should have same policy as local
       	     Config.mode=args[0];
-      	     Config.localthrottling=Double.parseDouble(args[1]);   
+      	     Config.localthrottling=Double.parseDouble(args[1]);
+			if(args.length==3) {
+				Config.adaptor_policy = Integer.parseInt(args[2]);
+			}
   	     }
     	int port=3333;
     	

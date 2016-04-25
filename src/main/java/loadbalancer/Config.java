@@ -20,7 +20,7 @@ public class Config {
 	 public static final Object QUEUE_LOCK = new Object();
 	 public static final int hardwareMontiorSleeptime = 500;
 	 public static final int stateManagerSleeptime = 100;
-	 public static  int adaptor_policy = 2;  // 0=send, 1=receive, 2=mixed
+	 public static  int adaptor_policy = 0;  // 0=send, 1=receive, 2=mixed
 
 	
 }
