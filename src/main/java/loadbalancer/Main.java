@@ -40,14 +40,26 @@ public class Main {
             //remote should have same policy as local
             Config.mode = args[0];
             Config.localthrottling = Double.parseDouble(args[1]);
-            if (args.length == 3) {
+            if (args.length >= 3) {
                 Config.adaptor_policy = Integer.parseInt(args[2]);
             }
+            if(args.length >= 4){
+                Config.localHost = args[3]; //of form "http://localhost:2222/requests";
+            }
+            if(args.length >= 5){
+                Config.localPort = Integer.parseInt(args[4]); //port of local (smaller) node
+            }
+            if(args.length >= 6){
+                Config.remoteHost = args[5]; // of form "http://localhost:3333/requests";
+            }
+            if(args.length >= 7){
+                Config.remotePort = Integer.parseInt(args[6]); //8080
+            }
         }
-        int port = 3333;
+        int port = Config.remotePort;
 
         if (Config.mode.equals("local")) {
-            port = 2222;
+            port = Config.localPort;
 
         }
 
@@ -89,6 +101,7 @@ public class Main {
                 Job job = new Job(i, start, end);
                 if (i < totaljobs / 2) {
                     HttpConnection.sendPost("addJob", job);
+                    System.out.println("Initial transfer of job: " + i);
                 } else {
                     jobQueue.add(job);
                 }

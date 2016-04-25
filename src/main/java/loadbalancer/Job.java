@@ -21,7 +21,7 @@ public class Job {
         for(int i=0;i<Config.jobSize;i++){
         	values[i]=1.11111;
         }        
-    	System.out.println(this.jobId);
+    	System.out.println("Creating job: " + this.jobId);
     }
     public Job(){
     	
