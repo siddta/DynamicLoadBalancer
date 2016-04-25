@@ -22,8 +22,12 @@ import org.glassfish.jersey.servlet.ServletContainer;
 /**
  * @author tarique
  */
+
+
+//Main controller class. It starts the process, makes it listen on a particular port, creates necessary threads, handles their coordination and runs the boostrap, processing 
+// and aggregation phase. 
 public class Main {
-    public static Queue<Job> jobQueue = new ArrayDeque<Job>(); // do we need a blocking queue?
+    public static Queue<Job> jobQueue = new ArrayDeque<Job>(); 
     public static StateManager stateManager;
     public static HardwareMonitor hardwareMonitor;
     public static TransferManager transferManager;
@@ -116,8 +120,7 @@ public class Main {
 
 
     }
-    //main loop
-
+    
 
     private void processing() throws InterruptedException {
         startTime = System.currentTimeMillis();
