@@ -16,7 +16,7 @@ public class StateManager implements Runnable {
         //main queue processing
         try {
             while (true) {
-                localState.pendingJobs=main.jobQueue.size();
+                localState.pendingJobs=Main.jobQueue.size();
                 sendLocalStatetoRemoteServer();
                 Thread.sleep(Config.stateManagerSleeptime);
             }
@@ -25,10 +25,13 @@ public class StateManager implements Runnable {
     }
 
 	public  void sendLocalStatetoRemoteServer() throws Exception {
-		if(Config.mode=="remote")
-		System.out.println(mapper.writeValueAsString(localState));
+		try{
 		HttpConnection.sendPost("submitState",localState);
-		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	

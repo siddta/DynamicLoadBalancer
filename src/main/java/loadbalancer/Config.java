@@ -15,7 +15,7 @@ public class Config {
 	 public final static String localHost="http://localhost:2222/requests";
 	 public final static String remoteHost="http://localhost:3333/requests";
 	 public static String mode;
-	 public static double localThreshold=75;
+	 public static double localthrottling=.75;
 	 public static boolean shouldStartProcessing=false;
 	 public static final Object QUEUE_LOCK = new Object();
 	 public static final int hardwareMontiorSleeptime = 500;

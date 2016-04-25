@@ -54,7 +54,6 @@ public class RequestHandlers {
 	@Path("/submitState")
 	@Consumes(MediaType.TEXT_PLAIN)
 	public String submitState(String json) throws Exception {
-		if(Config.mode=="local")
 		System.out.println(json);
 		State state = mapper.readValue(json,State.class);
 		Main.stateManager.updateRemoteState(state);	

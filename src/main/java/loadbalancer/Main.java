@@ -39,7 +39,7 @@ public class Main
     	
     	if(args.length > 0) {
       	     Config.mode=args[0];
-      	     Config.localThreshold=Double.parseDouble(args[1]);   
+      	     Config.localthrottling=Double.parseDouble(args[1]);   
   	     }
     	int port=3333;
     	
@@ -78,6 +78,7 @@ public class Main
 	    stateManager=new StateManager();
 		hardwareMonitor = new HardwareMonitor(stateManager);
 		transferManager = new TransferManager();
+		stateManager.localState.throttlingValue=Config.localthrottling;
 	
         
         if( Config.mode.equals("local")){
