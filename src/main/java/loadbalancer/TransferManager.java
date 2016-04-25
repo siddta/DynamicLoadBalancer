@@ -37,7 +37,7 @@ public class TransferManager {
 
         }
 
-        System.out.println(Config.mode + ":TransferManager send jobs finished");
+        //System.out.println(Config.mode + ":TransferManager send jobs finished");
 
     }
 
@@ -69,7 +69,7 @@ public class TransferManager {
                 additionalLocalJobsNeeded--;
             }
 
-            System.out.println(Config.mode + ":TransferManager receive jobs finhsed");
+            //System.out.println(Config.mode + ":TransferManager receive jobs finhsed");
 
 
 

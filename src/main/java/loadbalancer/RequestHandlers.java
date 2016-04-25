@@ -39,7 +39,7 @@ public class RequestHandlers {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getjob() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
 		System.out.println("Received get job request "); //(our node is overloaded, receiver wants it)
-		System.out.println("Queue size " + Main.jobQueue.size());
+		//System.out.println("Queue size " + Main.jobQueue.size());
 		String response="";
 		synchronized (Config.QUEUE_LOCK) {
 			if(Main.jobQueue.size()>0){
