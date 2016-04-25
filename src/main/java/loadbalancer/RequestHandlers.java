@@ -28,6 +28,9 @@ public class RequestHandlers {
 	@Path("/addJob")
 	@Consumes(MediaType.TEXT_PLAIN)
 	public void addjob(String json) throws JsonParseException, JsonMappingException, IOException {	
+	/*	
+		final byte[] isoBytes = json.getBytes("ISO-8859-1");
+		System.out.println("No. of bytes transferred for one job"+isoBytes.length);*/		
 		Job job = mapper.readValue(json,Job.class);
 		Main.jobQueue.add(job);
 		System.out.println("Received Job with Id:"+job.getJobId()); //(our node is underloaded, sender is overloaded)

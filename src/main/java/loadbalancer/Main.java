@@ -145,7 +145,7 @@ public class Main {
         while (stateManager.localState.stage < 2) { //aka end of processing state
             Thread.sleep(25);
         }
-        endTime = System.currentTimeMillis();
+       
 
     }
 
@@ -163,13 +163,14 @@ public class Main {
             while (StateManager.remoteState.stage < 3) {
                 Thread.sleep(10);
             }
+            endTime = System.currentTimeMillis();
 
             Collections.sort(processedJobList, new Comparator<Job>() {
                 public int compare(Job a, Job b) {
                     return (Integer.valueOf(a.getJobId()).compareTo(b.getJobId()));
                 }
             });
-            for (Job b : processedJobList) {
+             for (Job b : processedJobList) {
                 double[] values = b.getValues();
                 int offset = b.getJobId() * Config.jobSize;
                 for (int i = 0; i < Config.jobSize; i++)
