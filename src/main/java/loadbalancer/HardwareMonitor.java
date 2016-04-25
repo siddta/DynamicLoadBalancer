@@ -20,7 +20,7 @@ public class HardwareMonitor implements Runnable {
     }
    
     public void run() {
-        while(true){
+        while(Config.monitor){
             //maybe sleep for awhile?
             try
             {
@@ -30,6 +30,7 @@ public class HardwareMonitor implements Runnable {
                 // TODO: handle exception
             }
             getSystemStatistics();
+
         }
     }
 

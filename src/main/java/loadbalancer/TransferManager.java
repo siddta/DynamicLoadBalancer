@@ -33,6 +33,9 @@ public class TransferManager {
                 HttpConnection.sendPost("addJob", job);
                 System.out.println(Config.mode + ":TransferManager sent job with id:" + job.getJobId());
                 additionalremoteJobsNeeded--;
+                if(Config.mode.equals("local")){
+                    Config.jobsTransferred++;
+                }
             }
 
         }
@@ -67,6 +70,9 @@ public class TransferManager {
                 Main.jobQueue.add(job);
                 System.out.println(Config.mode + ":TransferManager received job with id:" + job.getJobId());
                 additionalLocalJobsNeeded--;
+                if(Config.mode.equals("local")){
+                    Config.jobsTransferred++;
+                }
             }
 
             //System.out.println(Config.mode + ":TransferManager receive jobs finhsed");

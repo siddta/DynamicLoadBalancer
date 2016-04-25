@@ -19,7 +19,9 @@ public class StateManager implements Runnable {
                 localState.pendingJobs=Main.jobQueue.size();
                 sendLocalStatetoRemoteServer();
                 Adaptor.apply_transfer_policy();
-                System.out.print( "CPU Usage " +(localState.getCpuUsePercent())+"\n");
+                if(Config.monitor){
+                    System.out.print( "CPU Usage " +(localState.getCpuUsePercent())+"\n");
+                }
                 Thread.sleep(Config.stateManagerSleeptime);
             }
         } catch (Exception e) {
