@@ -29,7 +29,7 @@ public class RequestHandlers {
 	public void addjob(String json) throws JsonParseException, JsonMappingException, IOException {	
 		Job job = mapper.readValue(json,Job.class);
 		Main.jobQueue.add(job);
-		System.out.println("Received Job with Id:"+job.getJobId());
+		System.out.println("Received Job with Id:"+job.getJobId()); //(our node is underloaded, sender is overloaded)
 		
 	}
 
@@ -38,7 +38,8 @@ public class RequestHandlers {
 	@Path("/getJob")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getjob() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
-		System.out.println("Received get job request");
+		System.out.println("Received get job request "); //(our node is overloaded, receiver wants it)
+		System.out.println("Queue size " + Main.jobQueue.size());
 		String response="";
 		synchronized (Config.QUEUE_LOCK) {
 			if(Main.jobQueue.size()>0){

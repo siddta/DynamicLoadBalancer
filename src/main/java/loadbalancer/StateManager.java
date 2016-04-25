@@ -18,6 +18,7 @@ public class StateManager implements Runnable {
             while (true) {
                 localState.pendingJobs=Main.jobQueue.size();
                 sendLocalStatetoRemoteServer();
+                Adaptor.apply_transfer_policy();
                 Thread.sleep(Config.stateManagerSleeptime);
             }
         } catch (Exception e) {
@@ -43,8 +44,9 @@ public class StateManager implements Runnable {
 	public  void updateThreshold(double throttlingValue) throws Exception {
 		localState.throttlingValue=throttlingValue;
 		sendLocalStatetoRemoteServer();
-		
-	}
+        Adaptor.apply_transfer_policy();
+
+    }
 
 
 }

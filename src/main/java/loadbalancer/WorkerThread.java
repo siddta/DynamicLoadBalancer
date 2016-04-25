@@ -20,7 +20,7 @@ public class WorkerThread implements Runnable {
                     //job.execute();
                   estimatedTime=executeJob(job);
                 }
-                Thread.sleep((long)(estimatedTime*(main.stateManager.localState.throttlingValue)));
+                Thread.sleep((long)(estimatedTime*(1-main.stateManager.localState.throttlingValue)));
             }
         } catch (InterruptedException e) {
             //if interrupted while taking
@@ -39,7 +39,9 @@ public class WorkerThread implements Runnable {
         } 
     }
     	job.setValues(values);
-    	Main.processedJobList.add(job);
+        System.out.println("Finished Job with Id:"+job.getJobId());
+
+        Main.processedJobList.add(job);
         long estimatedTime = System.currentTimeMillis() - startTime;
 		return estimatedTime;
     }

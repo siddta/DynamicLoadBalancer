@@ -5,9 +5,9 @@ package loadbalancer;
  */
 public class Adaptor {
 
-	public Main main;
+	public static Main main;
 	
-	public void apply_transfer_policy() throws InterruptedException, Exception{
+	public static void apply_transfer_policy() throws InterruptedException, Exception{
 		if(Config.adaptor_policy==0){
 			main.transferManager.sendJobs();
 		}
